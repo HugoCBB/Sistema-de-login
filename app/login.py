@@ -1,10 +1,10 @@
 import flet as ft
-from useaction_table import create_table
+from banco_de_dados import create_table
 import sqlite3
 conn = sqlite3.connect("db/dbcad.db", check_same_thread= False)
 
 def main(page: ft.Page):
-    # create_table
+    create_table()
     page.title = 'Login'
     page.bgcolor = '#2F6DE3'
     page.window_width = 500
@@ -18,9 +18,14 @@ def main(page: ft.Page):
     def cadastro(e):
         try:
             c = conn.cursor()
-            c.execute('INSER INTO users(email,senha) VALUES(?,?)',(email.value,senha.value))
+            c.execute('INSERT INTO users(email,senha) VALUES(?,?)',(email.value,senha.value))
             conn.commit()
-            
+            page.snack_bar = ft.SnackBar(
+            ft.Text('Cadastro realizado com sucesso'),
+            bgcolor= 'Blue'
+        )
+            page.snack_bar.open = True
+            page.update()
         except Exception as es:
             print(e)
     
